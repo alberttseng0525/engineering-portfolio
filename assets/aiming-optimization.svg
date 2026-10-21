@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 780" role="img" aria-labelledby="title desc">
+  <title id="title">Trajectory optimization nonlinear program</title>
+  <desc id="desc">Minimize the sum of squared shot-position sensitivities to flywheel speed and pitch, plus a height penalty. Constraints keep RPM and pitch in range, require descent through the target, limit peak height, and keep the endpoint within tolerances.</desc>
+  <rect width="1200" height="780" rx="24" fill="#f1f5f4"/>
+  <text x="56" y="82" fill="#3a7189" font-family="Arial, sans-serif" font-size="26" font-weight="700" letter-spacing="4">TRAJECTORY OPTIMIZATION</text>
+  <text x="56" y="142" fill="#18262c" font-family="Arial, sans-serif" font-size="42" font-weight="700">Nonlinear program</text>
+  <rect x="56" y="180" width="1088" height="150" rx="16" fill="#fff" stroke="#d3e1e4" stroke-width="2"/>
+  <text x="600" y="242" text-anchor="middle" fill="#18262c" font-family="Cambria Math, STIX Two Math, Georgia, serif" font-size="39" font-weight="600">min<tspan baseline-shift="sub" font-size="26">(v, θ)</tspan>  [ (∂x/∂v)² + (∂x/∂θ)² + H ]</text>
+  <text x="56" y="392" fill="#3a7189" font-family="Arial, sans-serif" font-size="25" font-weight="700" letter-spacing="4">SUBJECT TO</text>
+  <g fill="#203640" font-family="Arial, sans-serif" font-size="31">
+    <circle cx="81" cy="452" r="21" fill="#d7e9e8"/><text x="81" y="462" text-anchor="middle" font-size="25" font-weight="700">1</text><text x="126" y="462">Flywheel RPM and pitch stay within their ranges</text>
+    <circle cx="81" cy="526" r="21" fill="#d7e9e8"/><text x="81" y="536" text-anchor="middle" font-size="25" font-weight="700">2</text><text x="126" y="536">Fuel descends through the target</text>
+    <circle cx="81" cy="600" r="21" fill="#d7e9e8"/><text x="81" y="610" text-anchor="middle" font-size="25" font-weight="700">3</text><text x="126" y="610">Maximum trajectory height is limited</text>
+    <circle cx="81" cy="674" r="21" fill="#d7e9e8"/><text x="81" y="684" text-anchor="middle" font-size="25" font-weight="700">4</text><text x="126" y="684">Final position stays within target tolerances</text>
+  </g>
+</svg>

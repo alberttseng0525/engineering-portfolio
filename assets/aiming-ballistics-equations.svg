@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+  <title id="title">Three-dimensional ballistics equations</title>
+  <desc id="desc">Velocity derivatives U, V, and W include aerodynamic drag, Magnus force from angular velocity, and gravity. Position derivatives equal velocity.</desc>
+  <rect width="1200" height="650" rx="24" fill="#eef3f5"/>
+  <text x="58" y="62" fill="#3a7189" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="4">3D BALLISTICS MODEL</text>
+  <g fill="#203640" font-family="Cambria Math, STIX Two Math, Georgia, serif" font-size="30">
+    <text x="58" y="148">∂U/∂t = −C<tspan baseline-shift="sub" font-size="21">d</tspan> (ρA/2m) U √(U² + V² + W²)</text>
+    <text x="105" y="196">+ C<tspan baseline-shift="sub" font-size="21">m</tspan> (ρAr/2m) (ω<tspan baseline-shift="sub" font-size="21">y</tspan>W − ω<tspan baseline-shift="sub" font-size="21">z</tspan>V)</text>
+    <text x="58" y="282">∂V/∂t = −C<tspan baseline-shift="sub" font-size="21">d</tspan> (ρA/2m) V √(U² + V² + W²)</text>
+    <text x="105" y="330">+ C<tspan baseline-shift="sub" font-size="21">m</tspan> (ρAr/2m) (ω<tspan baseline-shift="sub" font-size="21">z</tspan>U − ω<tspan baseline-shift="sub" font-size="21">x</tspan>W)</text>
+    <text x="58" y="416">∂W/∂t = −C<tspan baseline-shift="sub" font-size="21">d</tspan> (ρA/2m) W √(U² + V² + W²)</text>
+    <text x="105" y="464">+ C<tspan baseline-shift="sub" font-size="21">m</tspan> (ρAr/2m) (ω<tspan baseline-shift="sub" font-size="21">x</tspan>V − ω<tspan baseline-shift="sub" font-size="21">y</tspan>U) − g</text>
+    <text x="58" y="566">∂X/∂t = U<tspan dx="42">∂Y/∂t = V</tspan><tspan dx="42">∂Z/∂t = W</tspan></text>
+  </g>
+</svg>

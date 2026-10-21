@@ -1,1 +1,116 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Robot Aiming System · Po Chun Tseng Engineering</title><link rel="stylesheet" href="../style.css?v=3"></head><body><header><a href="../index.html?v=3"><b>Po Chun Tseng / Engineering</b></a><nav class="topnav" aria-label="Portfolio navigation"><a href="../index.html?v=3">Timeline</a><a href="../frc/index.html?v=3">FRC</a><a href="../projects/drone.html?v=3">Drone</a><a href="../projects/lidar.html?v=3">LiDAR Robot</a><a href="../projects/monitor.html?v=3">Hardware</a><a href="../projects/software.html?v=3">Software</a><a href="../projects/research.html?v=3">Research</a><a href="../projects/trading.html?v=3">Trading Bot</a></nav></header><main class="page"><a class="more" href="index.html?v=3">← FRC overview</a><div class="kicker">Jan–Sep 2026</div><h1>Robot Aiming System</h1><p class="lead">Robot targeting and aiming system; the technical details and measured outcomes will be added after review.</p><div class="placeholder">PLACEHOLDER · Robot aiming demo video</div><h2>Engineering process</h2><p>More information, technical decisions, challenges, testing and verified results will be added as this portfolio develops.</p></main><footer><strong>Still building.</strong><p>Engineering portfolio prototype · Media placeholders</p></footer></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="FRC Team 8020's 2026 shoot-on-the-move aiming system, from measured ballistics and trajectory optimization to real-time motion compensation.">
+  <title>Shoot on the Move · Po Chun Tseng Engineering</title>
+  <link rel="stylesheet" href="../style.css?v=3">
+  <style>
+    .aiming-page{max-width:1120px}
+    .aiming-tags{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 42px}
+    .aiming-tags span{border:1px solid #bacbd0;border-radius:99px;padding:6px 11px;font-size:12px;color:#355566;background:#f1f5f4}
+    .aiming-section{padding:42px 0;border-top:1px solid #d9e5e7}
+    .aiming-section h2{font-size:clamp(25px,3.3vw,38px);letter-spacing:-.04em;margin:10px 0}
+    .aiming-section>p{max-width:800px;color:var(--muted)}
+    .aiming-flow{display:grid;grid-template-columns:minmax(0,1fr) 28px minmax(0,1.15fr) 28px minmax(0,1fr) 28px minmax(0,1fr) 28px minmax(0,.85fr);gap:8px;align-items:stretch;margin-top:24px;padding:20px;background:#18262c;border:1px solid #34474e;border-radius:16px;box-shadow:0 14px 34px #1c303a24}
+    .aiming-flow-node{min-height:155px;padding:17px 14px;display:flex;flex-direction:column;justify-content:center;border:1px solid #52717b;border-radius:12px;background:#21363e;color:#eff5f5;text-align:center}
+    .aiming-flow-node b{font-size:16px;line-height:1.3}
+    .aiming-flow-node span{margin-top:9px;font-size:13px;line-height:1.45;color:#c6d6d9}
+    .aiming-flow-node.output{background:#294a45;border-color:#6ba18c}
+    .aiming-flow-arrow{align-self:center;color:#82b7c5;font-size:23px;text-align:center}
+    .aiming-media-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:22px;align-items:start}
+    .aiming-figure{margin:0;padding:12px;background:#18262c;border:1px solid #34474e;border-radius:16px;box-shadow:0 14px 34px #1c303a24;min-width:0}
+    .aiming-figure img,.aiming-figure video{display:block;width:100%;height:auto;max-height:560px;object-fit:contain;background:#f7f8f7;border-radius:8px}
+    .aiming-figure video{aspect-ratio:16/9;background:#10191e}
+    .aiming-figure figcaption{font-size:13px;color:#e1e9eb;margin:10px 3px 3px}
+    .aiming-wide{grid-column:1/-1}
+    .aiming-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:22px}
+    .aiming-card{padding:20px;border:1px solid #d3e1e4;border-radius:14px;background:#f7f9f8}
+    .aiming-card .kicker{font-size:11px}
+    .aiming-card h3{font-size:19px;margin:7px 0}
+    .aiming-card p{font-size:14px;color:var(--muted);margin:0}
+    .aiming-equation-figure{margin:18px 0 0}
+    .aiming-equation-figure img{display:block;width:100%;height:auto;border-radius:10px}
+    .aiming-model-figure{margin:20px 0 0;padding:12px;background:#18262c;border:1px solid #34474e;border-radius:16px}
+    .aiming-model-figure img{display:block;width:100%;height:auto;max-height:480px;object-fit:contain;background:#fff;border-radius:8px}
+    .aiming-model-figure figcaption{font-size:13px;color:#e1e9eb;margin:10px 3px 3px}
+    .aiming-flight-card{grid-column:1/-1;display:block}
+    .aiming-objective-figure{margin:22px 0 0;padding:18px;background:#f1f5f4;border:1px solid #d3e1e4;border-radius:14px;color:#18262c}
+    .aiming-objective-figure h3{margin:0 0 10px;font-size:18px}
+    .aiming-objective-figure img{display:block;width:100%;height:auto;border-radius:8px}
+    .aiming-objective-figure figcaption{margin-top:12px;font-size:13px;color:#536a72}
+    .aiming-note{padding:18px 20px;border-left:3px solid var(--accent);background:#eef4f4;color:var(--muted);margin-top:20px}
+    @media(max-width:900px) and (min-width:761px){.aiming-flow{grid-template-columns:minmax(90px,1fr) 18px minmax(110px,1.15fr) 18px minmax(90px,1fr) 18px minmax(90px,1fr) 18px minmax(70px,.8fr);gap:5px;padding:12px}.aiming-flow-node{padding:14px 8px}.aiming-flow-node b{font-size:14px}.aiming-flow-node span{font-size:11px}}
+    @media(max-width:760px){.aiming-flow{grid-template-columns:1fr;gap:7px;padding:14px}.aiming-flow-node{min-height:105px}.aiming-flow-arrow{transform:rotate(90deg);line-height:1.2}.aiming-flow-node:nth-of-type(n),.aiming-flow-arrow:nth-of-type(n){display:flex;justify-content:center}.aiming-media-grid,.aiming-cards{grid-template-columns:1fr}.aiming-wide{grid-column:auto}.aiming-flight-card{grid-column:auto}}
+  </style>
+</head>
+<body>
+  <header><a href="../index.html?v=3"><b>Po Chun Tseng / Engineering</b></a><nav class="topnav" aria-label="Portfolio navigation"><a href="../index.html?v=3">Timeline</a><a href="index.html?v=3">FRC</a><a href="../projects/drone.html?v=3">Drone</a><a href="../projects/lidar.html?v=3">LiDAR Robot</a><a href="../projects/monitor.html?v=3">Hardware</a><a href="../projects/software.html?v=3">Software</a><a href="../projects/research.html?v=3">Research</a><a href="../projects/trading.html?v=3">Trading Bot</a></nav></header>
+  <main class="page aiming-page">
+    <a class="more" href="index.html?v=3">← FRC overview</a>
+    <div class="kicker">FRC Team 8020 · 2026 season</div>
+    <h1>Shoot on the Move</h1>
+    <p class="lead">A moving robot changes the shot before the ball leaves the shooter. Our aiming system used robot position and velocity with a measured ballistics model to choose shooter and turret setpoints while driving.</p>
+    <div class="aiming-tags"><span>Real-time aiming</span><span>Trajectory optimization</span><span>240 fps shot tracking</span><span>3D velocity compensation</span></div>
+
+    <section class="aiming-section">
+      <div class="kicker">SYSTEM OVERVIEW</div>
+      <h2>From robot motion to a ready-to-fire shot</h2>
+      <p>The robot’s field position sets the target geometry, and its chassis velocity changes the required launch vector. A precomputed shot model supplies the flywheel and pitch targets. PID control moves the mechanisms, then a distance-based aiming tolerance gates the indexer.</p>
+      <div class="aiming-flow" role="img" aria-label="Robot position and velocity inform the shot solution; shooter setpoints are controlled with PID, and the indexer runs only when aiming tolerances are met.">
+        <div class="aiming-flow-node"><b>Robot state</b><span>Field position<br>Chassis velocity</span></div><div class="aiming-flow-arrow" aria-hidden="true">→</div>
+        <div class="aiming-flow-node"><b>Shot solution</b><span>Target distance<br>Ballistic surface<br>Vector compensation</span></div><div class="aiming-flow-arrow" aria-hidden="true">→</div>
+        <div class="aiming-flow-node"><b>Mechanism targets</b><span>Turret direction<br>Shooter pitch<br>Flywheel speed</span></div><div class="aiming-flow-arrow" aria-hidden="true">→</div>
+        <div class="aiming-flow-node"><b>PID + tolerance</b><span>Move to setpoints<br>Check aim readiness</span></div><div class="aiming-flow-arrow" aria-hidden="true">→</div>
+        <div class="aiming-flow-node output"><b>Indexer</b><span>Feed when ready</span></div>
+      </div>
+    </section>
+
+    <section class="aiming-section">
+      <div class="kicker">01 / CALIBRATE THE MODEL</div>
+      <h2>Connect simulated ballistics to the real shooter</h2>
+      <p>We modeled a fuel’s flight, then used 240 fps footage in Tracker to measure complete shot arcs. Real shots provided the relationship between flywheel speed and ball exit speed, fitted with a second-order regression. Comparing the measured paths with simulations also helped us correct model constants that initially came from approximate reference values.</p>
+      <div class="aiming-media-grid">
+        <figure class="aiming-figure"><img src="../assets/aiming-rps-speed-calibration.png" alt="Measured flywheel rotations per second versus ball exit speed with a second-order regression fit" loading="lazy"><figcaption>Measured shooter speed to ball exit speed · Second-order regression used to bridge the simulation and robot.</figcaption></figure>
+        <figure class="aiming-figure"><img src="../assets/aiming-tracker-capture.jpg" alt="Tracker showing a robot shot with the tracked fuel position and horizontal and vertical trajectory graphs" loading="lazy"><figcaption>Tracker view · A tracked shot with position plotted against time.</figcaption></figure>
+      </div>
+      <div class="aiming-cards">
+        <article class="aiming-card aiming-flight-card"><div class="kicker">FLIGHT MODEL</div><h3>Forces on the fuel</h3><p>Our 3D model evolves the fuel’s velocity under aerodynamic drag, Magnus force, and gravity, then integrates velocity to update position. The early C-shooter model assumed zero fuel angular velocity.</p><figure class="aiming-equation-figure"><img src="../assets/aiming-ballistics-equations-reference.png" alt="Three-dimensional ballistics equations from the team notes, including aerodynamic drag, Magnus force, gravity, and position integration" loading="lazy"></figure><figure class="aiming-model-figure"><img src="../assets/aiming-free-body.jpg" alt="Free-body diagram of the fuel showing drag opposite its velocity, downward gravity, and Magnus force from spin along its trajectory" loading="lazy"><figcaption>Free-body diagram · Gravity, drag, and spin-dependent Magnus force shape the modeled flight.</figcaption></figure></article>
+        <article class="aiming-card"><div class="kicker">HARD LIMITS</div><h3>Keep solutions practical</h3><p>Constrain flywheel speed and pitch to mechanism ranges, limit peak height, and require the fuel to descend through the target zone.</p></article>
+        <article class="aiming-card"><div class="kicker">OBJECTIVE</div><h3>Choose a robust path</h3><p>The nonlinear program minimizes sensitivity to flywheel speed and pitch while penalizing excess trajectory height, subject to mechanism and shot constraints.</p></article>
+      </div>
+      <figure class="aiming-objective-figure"><img src="../assets/aiming-optimization-reference.png" alt="Team slide showing the nonlinear-program objective and constraints for RPM, pitch, descending through the target, maximum height, and final position tolerance" loading="lazy"><figcaption>Nonlinear program · Objective and constraints from the team notes.</figcaption></figure>
+    </section>
+
+    <section class="aiming-section">
+      <div class="kicker">02 / RUN THE SOLUTION IN REAL TIME</div>
+      <h2>Precompute trajectories, then look up setpoints</h2>
+      <p>Solving every trajectory on the robot would add work to the control loop. We summarized simulation results in a third-order polynomial surface. Target distance and radial robot velocity select shooter pitch and wheel RPM; the robot then drives the turret and shooter toward those setpoints. The aim tolerance is based on a fixed distance at the target, so its angular allowance changes with range.</p>
+      <div class="aiming-media-grid">
+        <figure class="aiming-figure aiming-wide"><img src="../assets/aiming-ballistic-surface.jpg" alt="Fitted ballistics surface mapping target distance and radial robot velocity to shooter pitch angle and wheel RPM" loading="lazy"><figcaption>Precomputed shot surface · Distance and radial velocity map to pitch angle and wheel RPM.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="aiming-section">
+      <div class="kicker">03 / COMPENSATE FOR CHASSIS MOTION</div>
+      <h2>Subtract robot velocity from the required shot vector</h2>
+      <p>For a moving shot, the ball already carries the robot’s translational velocity when it leaves the shooter. We used vector subtraction to find the shooter-relative launch vector that produces the desired field-relative path. Representing the shot in three dimensions connects the solution to turret direction, shooter pitch, and wheel speed.</p>
+      <div class="aiming-media-grid">
+        <figure class="aiming-figure aiming-wide"><video controls playsinline preload="metadata" aria-label="Vector subtraction visualization for shooting while the robot moves"><source src="../assets/aiming-vector-subtraction.mp4" type="video/mp4">Your browser does not support this video.</video><figcaption>Vector subtraction · Visualizing how chassis motion changes the shooter-relative velocity needed for the shot.</figcaption></figure>
+      </div>
+      <div class="aiming-note"><strong>Control sequence:</strong> The robot updates the shot targets, PID control moves the turret and shooter, and the indexer feeds fuel once the mechanism is inside its aiming tolerance.</div>
+    </section>
+
+    <section class="aiming-section">
+      <div class="kicker">04 / TEST AND ADAPT</div>
+      <h2>Fuel compression changed the trajectory</h2>
+      <p>Fuel stiffness varied between pieces and changed the ballistics. We used compression distance as a practical way to group the variation, then compared tracked trajectories for representative 15 mm and 23–27 mm compression groups. The goal was to find shot settings that reached the target across that spread.</p>
+      <div class="aiming-media-grid">
+        <figure class="aiming-figure aiming-wide"><img src="../assets/aiming-fuel-compression.jpg" alt="Simulated fuel trajectories for different measured fuel compression groups and shooter wheel sizes, with a target zone" loading="lazy"><figcaption>Compression study · Fuel compressed by different amounts produced different flight paths.</figcaption></figure>
+      </div>
+    </section>
+  </main>
+  <footer><strong>FRC Team 8020 · 2026</strong><p>Shoot-on-the-move ballistics, calibration, and real-time aiming.</p></footer>
+</body>
+</html>

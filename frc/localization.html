@@ -1,1 +1,174 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Multi-Camera Robot Localization · Po Chun Tseng Engineering</title><link rel="stylesheet" href="../style.css?v=3"></head><body><header><a href="../index.html?v=3"><b>Po Chun Tseng / Engineering</b></a><nav class="topnav" aria-label="Portfolio navigation"><a href="../index.html?v=3">Timeline</a><a href="../frc/index.html?v=3">FRC</a><a href="../projects/drone.html?v=3">Drone</a><a href="../projects/lidar.html?v=3">LiDAR Robot</a><a href="../projects/monitor.html?v=3">Hardware</a><a href="../projects/software.html?v=3">Software</a><a href="../projects/research.html?v=3">Research</a><a href="../projects/trading.html?v=3">Trading Bot</a></nav></header><main class="page"><a class="more" href="index.html?v=3">← FRC overview</a><div class="kicker">Oct 2025–Mar 2026</div><h1>Multi-Camera Robot Localization</h1><p class="lead">Two Limelights and two USB cameras on an Orange Pi collect AprilTag observations; buffered vision estimates are combined with odometry using a Kalman filter.</p><div class="placeholder">PLACEHOLDER · Four-camera architecture and localization visualization</div><h2>Engineering process</h2><p>More information, technical decisions, challenges, testing and verified results will be added as this portfolio develops.</p></main><footer><strong>Still building.</strong><p>Engineering portfolio prototype · Media placeholders</p></footer></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A four-camera FRC localization system combining Limelight and USB camera AprilTag observations with robot odometry.">
+  <title>Multi-Camera Robot Localization · Po Chun Tseng Engineering</title>
+  <link rel="stylesheet" href="../style.css?v=3">
+  <style>
+    .localization-page{max-width:1120px}
+    .localization-lead{max-width:790px;color:var(--muted);font-size:19px}
+    .localization-tags{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 42px}
+    .localization-tags span{border:1px solid #bacbd0;border-radius:99px;padding:6px 11px;font-size:12px;color:#355566;background:#f1f5f4}
+    .localization-section{padding:42px 0;border-top:1px solid #d9e5e7}
+    .localization-section h2{font-size:clamp(25px,3.3vw,38px);letter-spacing:-.04em}
+    .localization-section>p{max-width:800px;color:var(--muted)}
+    .localization-diagram{margin:28px 0 0;padding:24px;background:#18262c;border:1px solid #34474e;border-radius:18px;box-shadow:0 14px 34px #1c303a24}
+    .localization-diagram svg{display:block;width:100%;height:auto}
+    .localization-diagram figcaption{font-size:13px;color:#d6e2e4;margin:14px 3px 2px}
+    .localization-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+    .localization-card{padding:21px;border:1px solid #d3e1e4;border-radius:14px;background:#f7f9f8}
+    .localization-card .step{font-size:12px;color:var(--accent);letter-spacing:.1em;font-weight:700}
+    .localization-card h3{margin:8px 0}
+    .localization-card p{margin-bottom:0;color:var(--muted);font-size:14px}
+    .localization-note{padding:18px 20px;border-left:3px solid var(--accent);background:#eef4f4;color:var(--muted)}
+    .localization-media-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:22px}
+    .localization-figure{margin:0;padding:12px;background:#18262c;border:1px solid #34474e;border-radius:16px;box-shadow:0 14px 34px #1c303a24}
+    .localization-figure img{display:block;width:100%;max-height:580px;object-fit:contain;background:#dce5e8;border:1px solid #71848b;border-radius:8px}
+    .localization-figure figcaption{font-size:13px;color:#e1e9eb;margin:10px 3px 3px}
+    .localization-coverage{grid-template-columns:minmax(0,1.4fr) minmax(260px,.8fr);align-items:start}
+    .setup-photo{position:relative;width:100%;aspect-ratio:960/1706;overflow:hidden;border-radius:8px;background:#111820}
+    .setup-photo img,.setup-photo svg{position:absolute;inset:0;width:100%;height:100%}
+    .setup-photo img{max-height:none;object-fit:fill}
+    .setup-photo svg{pointer-events:none}
+    .setup-photo .label-box{fill:#10232f;stroke:#78e2dc;stroke-width:5}
+    .setup-photo .label-text{fill:#fff;font:700 25px system-ui,sans-serif;letter-spacing:.7px}
+    .setup-photo .callout-line{fill:none;stroke:#10232f;stroke-width:16;stroke-linecap:round;stroke-linejoin:round}
+    .setup-photo .callout-top{fill:none;stroke:#78e2dc;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#setup-arrow)}
+    .localization-setup-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:start;margin-top:22px}
+    .localization-placeholder{min-height:220px;padding:24px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;border:2px dashed #91aab2;border-radius:14px;background:repeating-linear-gradient(135deg,#f5f8f7,#f5f8f7 12px,#edf3f2 12px,#edf3f2 24px)}
+    .localization-placeholder strong{color:#355566;font-size:16px}.localization-camera-photo{margin:0}.localization-annotated-photo{position:relative;overflow:hidden;border-radius:9px;background:#10191e}.localization-annotated-photo img,.localization-annotated-photo svg{display:block;width:100%;height:auto}.localization-annotated-photo svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.localization-annotated-photo img{max-height:none!important;border:0!important;object-fit:cover}.localization-usb-photo img{max-height:none!important;object-fit:contain;background:#10191e}
+    .localization-placeholder span{color:var(--muted);font-size:13px;margin-top:8px}
+    .localization-video-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:22px}
+    .localization-video{width:100%;aspect-ratio:16/9;object-fit:contain;background:#10191e;border-radius:9px}
+    .localization-source{margin-top:10px;padding:14px 16px;border-radius:10px;background:#eef4f4;color:var(--muted);font-size:13px}
+    .localization-source a{color:var(--accent);font-weight:650}
+    @media(max-width:900px){.localization-video-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:760px){.localization-grid,.localization-media-grid,.localization-coverage,.localization-setup-layout,.localization-video-grid{grid-template-columns:1fr}.localization-diagram{padding:10px;margin-inline:-8px;overflow-x:auto}.localization-diagram svg{min-width:760px}.localization-diagram figcaption{padding:0 8px}}
+  </style>
+</head>
+<body>
+  <header><a href="../index.html?v=3"><b>Po Chun Tseng / Engineering</b></a><nav class="topnav" aria-label="Portfolio navigation"><a href="../index.html?v=3">Timeline</a><a href="index.html?v=3">FRC</a><a href="../projects/drone.html?v=3">Drone</a><a href="../projects/lidar.html?v=3">LiDAR Robot</a><a href="../projects/monitor.html?v=3">Hardware</a><a href="../projects/software.html?v=3">Software</a><a href="../projects/research.html?v=3">Research</a><a href="../projects/trading.html?v=3">Trading Bot</a></nav></header>
+  <main class="page localization-page">
+    <a class="more" href="index.html?v=3">← FRC overview</a>
+    <div class="kicker">Oct 2025–Mar 2026 · FRC Team 8020</div>
+    <h1>Multi-Camera Robot Localization</h1>
+    <p class="localization-lead">Two Limelights feed vision estimates into a buffer. Two USB cameras send their observations through an Orange Pi before buffering. The buffered vision estimates and robot odometry are combined by a Kalman filter to produce the robot pose estimate.</p>
+    <div class="localization-tags"><span>4 cameras</span><span>2 Limelights</span><span>2 USB cameras</span><span>Orange Pi</span><span>AprilTags</span><span>Odometry fusion</span></div>
+
+    <section class="localization-section">
+      <div class="kicker">SYSTEM OVERVIEW</div>
+      <h2>Multiple observations, one robot pose estimate</h2>
+      <p>The two Limelights feed their vision estimates to a buffer. The two USB cameras feed the Orange Pi, which passes their estimates to a second buffer. Both buffered vision streams and robot odometry enter the final pose estimator.</p>
+      <figure class="localization-diagram">
+        <svg viewBox="0 0 1120 500" role="img" aria-labelledby="diagram-title diagram-desc" xmlns="http://www.w3.org/2000/svg">
+          <title id="diagram-title">Four-camera robot localization data flow</title>
+          <desc id="diagram-desc">Two Limelights feed a vision buffer directly. Two USB cameras send observations through an Orange Pi to a second buffer. Both buffered vision streams and robot odometry feed a Kalman filter for the final robot pose estimate.</desc>
+          <defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#82b7c5"/></marker></defs>
+          <rect x="20" y="55" width="230" height="110" rx="16" fill="#21363e" stroke="#50717c" stroke-width="2"/>
+          <text x="135" y="97" text-anchor="middle" fill="#98cbd5" font-size="15" font-family="system-ui" font-weight="700">VISION INPUT</text>
+          <text x="135" y="135" text-anchor="middle" fill="#f0f5f5" font-size="22" font-family="system-ui" font-weight="650">2 Limelights</text>
+          <path d="M250 110H330" fill="none" stroke="#82b7c5" stroke-width="3" marker-end="url(#arrow)"/>
+          <rect x="345" y="55" width="230" height="110" rx="16" fill="#21363e" stroke="#50717c" stroke-width="2"/>
+          <text x="460" y="97" text-anchor="middle" fill="#98cbd5" font-size="15" font-family="system-ui" font-weight="700">BUFFER</text>
+          <text x="460" y="135" text-anchor="middle" fill="#f0f5f5" font-size="19" font-family="system-ui" font-weight="650">Limelight estimates</text>
+          <path d="M575 110H835V175H850" fill="none" stroke="#82b7c5" stroke-width="3" marker-end="url(#arrow)"/>
+          <rect x="20" y="245" width="230" height="110" rx="16" fill="#21363e" stroke="#50717c" stroke-width="2"/>
+          <text x="135" y="287" text-anchor="middle" fill="#98cbd5" font-size="15" font-family="system-ui" font-weight="700">VISION INPUT</text>
+          <text x="135" y="325" text-anchor="middle" fill="#f0f5f5" font-size="22" font-family="system-ui" font-weight="650">2 USB cameras</text>
+          <path d="M250 300H300" fill="none" stroke="#82b7c5" stroke-width="3" marker-end="url(#arrow)"/>
+          <rect x="315" y="245" width="220" height="110" rx="16" fill="#21363e" stroke="#50717c" stroke-width="2"/>
+          <text x="425" y="287" text-anchor="middle" fill="#98cbd5" font-size="15" font-family="system-ui" font-weight="700">PROCESSING</text>
+          <text x="425" y="325" text-anchor="middle" fill="#f0f5f5" font-size="22" font-family="system-ui" font-weight="650">Orange Pi</text>
+          <path d="M535 300H570" fill="none" stroke="#82b7c5" stroke-width="3" marker-end="url(#arrow)"/>
+          <rect x="585" y="245" width="230" height="110" rx="16" fill="#21363e" stroke="#50717c" stroke-width="2"/>
+          <text x="700" y="287" text-anchor="middle" fill="#98cbd5" font-size="15" font-family="system-ui" font-weight="700">BUFFER</text>
+          <text x="700" y="325" text-anchor="middle" fill="#f0f5f5" font-size="19" font-family="system-ui" font-weight="650">USB camera estimates</text>
+          <path d="M815 300H850" fill="none" stroke="#82b7c5" stroke-width="3" marker-end="url(#arrow)"/>
+          <rect x="855" y="130" width="245" height="195" rx="16" fill="#294a45" stroke="#6ba18c" stroke-width="2"/>
+          <text x="977" y="172" text-anchor="middle" fill="#a8ddc4" font-size="15" font-family="system-ui" font-weight="700">FINAL POSE ESTIMATE</text>
+          <text x="977" y="217" text-anchor="middle" fill="#f0f5f5" font-size="22" font-family="system-ui" font-weight="650">Kalman filter</text>
+          <text x="977" y="252" text-anchor="middle" fill="#d0dee0" font-size="16" font-family="system-ui">Buffered vision</text>
+          <text x="977" y="279" text-anchor="middle" fill="#d0dee0" font-size="16" font-family="system-ui">+ robot odometry</text>
+          <rect x="65" y="390" width="230" height="80" rx="16" fill="#21363e" stroke="#50717c" stroke-width="2"/>
+          <text x="180" y="440" text-anchor="middle" fill="#f0f5f5" font-size="20" font-family="system-ui" font-weight="650">Robot odometry</text>
+          <path d="M295 430H830V285H850" fill="none" stroke="#82b7c5" stroke-width="3" marker-end="url(#arrow)"/>
+        </svg>
+        <figcaption>The two camera pathways are shown separately: Limelight estimates are buffered directly; USB camera observations pass through the Orange Pi before buffering. Robot odometry joins both vision streams at the final Kalman-filter estimate.</figcaption>
+      </figure>
+    </section>
+
+    <section class="localization-section">
+      <div class="kicker">CAMERA COVERAGE</div>
+      <h2>Use the CAD field of view to choose camera positions</h2>
+      <p>We compared the cameras’ field-of-view cones in the robot CAD model, then aimed the views toward different parts of the surrounding field with overlap between them. This helped us plan broad coverage while reducing blind spots caused by the robot frame and mechanisms. The CAD view shows the coverage layout used to reason about camera placement; it is a design check, not a claim of a measured or mathematically optimal result.</p>
+      <div class="localization-media-grid localization-coverage">
+        <figure class="localization-figure"><img src="../assets/localization-camera-coverage-cad.jpg" alt="FRC robot CAD model with four camera field-of-view regions drawn around the robot" loading="lazy"><figcaption>Camera placement plan · CAD field-of-view regions around the robot.</figcaption></figure>
+        <div class="localization-setup-layout" style="grid-template-columns:1fr; margin-top:0">
+          <figure class="localization-figure localization-camera-photo"><div class="localization-annotated-photo"><img src="../assets/localization-camera-placement.jpg" alt="Front view of the robot showing two Limelight cameras mounted on either side" loading="lazy"><svg viewBox="0 0 4032 3024" role="img" aria-label="Two Limelight cameras are mounted on the left and right sides of the robot front" xmlns="http://www.w3.org/2000/svg"><defs><marker id="camera-arrow" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto"><path d="M1 1L10 6 1 11" fill="none" stroke="#78e2dc" stroke-width="2"/></marker></defs><g fill="none" stroke="#10232f" stroke-width="38" stroke-linecap="round"><path d="M870 1060L950 1430"/><path d="M3170 1060L3090 1430"/></g><g fill="none" stroke="#78e2dc" stroke-width="18" stroke-linecap="round" marker-end="url(#camera-arrow)"><path d="M870 1060L950 1430"/><path d="M3170 1060L3090 1430"/></g><rect x="330" y="850" width="1080" height="210" rx="48" fill="#10232f" stroke="#78e2dc" stroke-width="18"/><text x="410" y="985" fill="#fff" font-family="system-ui,sans-serif" font-size="105" font-weight="800">LIMELIGHT CAMERA 1</text><rect x="2630" y="850" width="1080" height="210" rx="48" fill="#10232f" stroke="#78e2dc" stroke-width="18"/><text x="2710" y="985" fill="#fff" font-family="system-ui,sans-serif" font-size="105" font-weight="800">LIMELIGHT CAMERA 2</text></svg></div><figcaption>Robot camera placement · Two Limelight cameras mounted on opposite sides of the robot.</figcaption></figure>
+          <figure class="localization-figure localization-camera-photo"><div class="localization-annotated-photo localization-usb-photo"><img src="../assets/localization-usb-camera.jpg" alt="USB camera module mounted in a bracket on the robot" loading="lazy"><svg viewBox="0 0 1142 875" role="img" aria-label="Arrow identifying the USB camera module in its robot mount" xmlns="http://www.w3.org/2000/svg"><defs><marker id="usb-arrow" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto"><path d="M1 1L10 6 1 11" fill="none" stroke="#78e2dc" stroke-width="2"/></marker></defs><path d="M800 180L455 405" fill="none" stroke="#10232f" stroke-width="28" stroke-linecap="round"/><path d="M800 180L455 405" fill="none" stroke="#78e2dc" stroke-width="14" stroke-linecap="round" marker-end="url(#usb-arrow)"/><rect x="650" y="62" width="390" height="120" rx="28" fill="#10232f" stroke="#78e2dc" stroke-width="10"/><text x="695" y="140" fill="#fff" font-family="system-ui,sans-serif" font-size="52" font-weight="800">USB CAMERA</text></svg></div><figcaption>USB camera · The camera module is mounted in the front-facing bracket.</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="localization-section">
+      <div class="kicker">INITIAL TEST SETUP</div>
+      <h2>Early hardware testing</h2>
+      <p>The first setup was still being wired, so callouts identify the components that are visible in the photo.</p>
+      <figure class="localization-figure localization-sync-primary" style="max-width:760px;margin:22px auto 0">
+        <div class="setup-photo">
+          <img src="../assets/localization-initial-setup.jpg" alt="Early robot test setup annotated to identify the 12 volt battery, USB camera, main computer, radio, power distributor, and Orange Pi" loading="lazy">
+          <svg viewBox="0 0 960 1706" role="img" aria-labelledby="setup-title setup-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="setup-title">Callouts on the initial localization test setup</title>
+            <desc id="setup-desc">Callouts identify the 12 volt battery near the top, USB camera at left, main computer at center, radio below it, power distributor at right, and Orange Pi near the bottom.</desc>
+            <defs><marker id="setup-arrow" markerWidth="15" markerHeight="15" refX="12" refY="7.5" orient="auto"><path d="M0 0L15 7.5L0 15Z" fill="#78e2dc" stroke="#10232f" stroke-width="1.5"/></marker></defs>
+            <path class="callout-line" d="M265 132L330 250"/><path class="callout-top" d="M265 132L330 250"/>
+            <rect class="label-box" x="28" y="48" width="280" height="76" rx="18"/><text class="label-text" x="50" y="98">12 V BATTERY</text>
+            <path class="callout-line" d="M260 650L120 748"/><path class="callout-top" d="M260 650L120 748"/>
+            <rect class="label-box" x="24" y="566" width="280" height="76" rx="18"/><text class="label-text" x="46" y="616">USB CAMERA</text>
+            <path class="callout-line" d="M500 694L500 774"/><path class="callout-top" d="M500 694L500 774"/>
+            <rect class="label-box" x="390" y="610" width="340" height="76" rx="18"/><text class="label-text" x="412" y="660">MAIN COMPUTER</text>
+            <path class="callout-line" d="M270 994L300 1055"/><path class="callout-top" d="M270 994L300 1055"/>
+            <rect class="label-box" x="116" y="910" width="190" height="76" rx="18"/><text class="label-text" x="138" y="960">RADIO</text>
+            <path class="callout-line" d="M680 1190L810 1040"/><path class="callout-top" d="M680 1190L810 1040"/>
+            <rect class="label-box" x="415" y="1178" width="420" height="76" rx="18"/><text class="label-text" x="437" y="1228">POWER DISTRIBUTOR</text>
+            <path class="callout-line" d="M300 1400L250 1515"/><path class="callout-top" d="M300 1400L250 1515"/>
+            <rect class="label-box" x="42" y="1316" width="265" height="76" rx="18"/><text class="label-text" x="64" y="1366">ORANGE PI</text>
+          </svg>
+        </div>
+        <figcaption>Initial test setup · Callouts identify the 12 V battery, USB camera, main computer, radio, power distributor, and Orange Pi.</figcaption>
+      </figure>
+    </section>
+
+    <section class="localization-section">
+      <div class="kicker">LOCALIZATION PIPELINE</div>
+      <h2>From camera data to a fused estimate</h2>
+      <div class="localization-grid">
+        <article class="localization-card"><div class="step">01 / OBSERVE</div><h3>Collect AprilTag data</h3><p>The Limelights and USB cameras are parallel inputs; the USB camera stream passes through the Orange Pi.</p></article>
+        <article class="localization-card"><div class="step">02 / BUFFER</div><h3>Handle vision estimates</h3><p>Limelight estimates are buffered, while USB camera observations pass through the Orange Pi and then a buffer.</p></article>
+        <article class="localization-card"><div class="step">03 / FUSE</div><h3>Estimate robot position</h3><p>A Kalman filter combines buffered vision estimates with odometry into a robot pose estimate.</p></article>
+      </div>
+    </section>
+
+    <section class="localization-section">
+      <div class="kicker">ROBOT AND CAMERA TESTING</div>
+      <h2>Inspect detections, then follow the estimated pose</h2>
+      <p>The recordings show the Limelight’s AprilTag output, a 3D-targeting visualization, and the robot’s pose in AdvantageScope. Together they show the development and test views used to inspect the localization system.</p>
+      <div class="localization-video-grid">
+        <figure class="localization-figure"><video class="localization-video" controls playsinline preload="metadata" aria-label="3D targeting visualization with AprilTag detection and a robot field view"><source src="../assets/localization-3d-targeting-14-33s.mp4" type="video/mp4">Your browser does not support this video.</video><figcaption>Feb 25, 2026 · 3D-targeting dashboard with camera targets and a field visualization.</figcaption></figure>
+        <figure class="localization-figure"><video class="localization-video" controls playsinline preload="metadata" aria-label="Limelight interface showing AprilTag detections and pose output"><source src="../assets/localization-limelight-apriltag-0-5s.mp4" type="video/mp4">Your browser does not support this video.</video><figcaption>Apr 20, 2026 · Limelight interface showing AprilTag detections and multi-tag pose output.</figcaption></figure>
+        <figure class="localization-figure"><video class="localization-video" controls playsinline preload="metadata" aria-label="AdvantageScope field view with robot pose overlays"><source src="../assets/localization-advantagescope-pose-5-20s.mp4" type="video/mp4">Your browser does not support this video.</video><figcaption>Apr 22, 2026 · AdvantageScope field view with robot pose overlays.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="localization-section">
+      <div class="kicker">FUSION APPROACH</div>
+      <h2>Kalman filter: fuse camera estimates with odometry</h2>
+      <p>The buffered vision estimates provide field-based position measurements, while robot odometry tracks motion between camera updates. The Kalman filter combines those inputs into one robot pose estimate, balancing the camera measurements with the motion prediction over time.</p>
+      <figure class="localization-figure localization-filter-figure" role="img" aria-label="Kalman filter fuses buffered camera pose estimates with robot odometry to produce the robot pose estimate"><svg viewBox="0 0 1120 330" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><marker id="filter-arrow" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto"><path d="M1 1L10 6 1 11" fill="none" stroke="#78e2dc" stroke-width="2"/></marker></defs><g font-family="system-ui,sans-serif" text-anchor="middle"><rect x="40" y="48" width="290" height="86" rx="18" fill="#203940" stroke="#78e2dc" stroke-width="3"/><text x="185" y="84" fill="#78e2dc" font-size="18" font-weight="700">VISION INPUT</text><text x="185" y="112" fill="#fff" font-size="20" font-weight="700">Buffered camera poses</text><rect x="40" y="196" width="290" height="86" rx="18" fill="#203940" stroke="#78e2dc" stroke-width="3"/><text x="185" y="232" fill="#78e2dc" font-size="18" font-weight="700">MOTION INPUT</text><text x="185" y="260" fill="#fff" font-size="20" font-weight="700">Robot odometry</text><rect x="440" y="108" width="280" height="112" rx="20" fill="#21453f" stroke="#8ccbb4" stroke-width="3"/><text x="580" y="151" fill="#8ccbb4" font-size="18" font-weight="700">FUSION</text><text x="580" y="185" fill="#fff" font-size="25" font-weight="800">Kalman filter</text><rect x="830" y="108" width="250" height="112" rx="20" fill="#21453f" stroke="#8ccbb4" stroke-width="3"/><text x="955" y="151" fill="#8ccbb4" font-size="18" font-weight="700">OUTPUT</text><text x="955" y="185" fill="#fff" font-size="23" font-weight="800">Robot pose</text><path d="M330 90C380 90 380 145 440 145M330 240C380 240 380 185 440 185M720 164H830" fill="none" stroke="#78e2dc" stroke-width="5" marker-end="url(#filter-arrow)"/></g></svg><figcaption>Pose estimation · Buffered camera measurements correct the odometry-based motion estimate.</figcaption></figure>      <div class="localization-note" style="margin-top:22px"><strong>Current scope:</strong> the page documents the reported architecture and the supplied test views. No specific accuracy, update rate, or competition result is claimed.</div>
+    </section>
+  </main>
+  <footer><strong>FRC Team 8020 · 2025–2026</strong><p>Multi-camera AprilTag observations and robot pose estimation.</p></footer>
+</body>
+</html>
