@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="650" viewBox="0 0 1120 650">
+<rect width="1120" height="650" fill="#f6f7f3"/>
+<style>text{font-family:Arial,sans-serif;fill:#193d36}.title{font-size:30px;font-weight:700}.h{font-size:21px;font-weight:700}.p{font-size:17px}.note{font-size:15px;fill:#52645e}.box{fill:white;stroke:#a6beb4;stroke-width:2}.arrow{fill:none;stroke:#34735e;stroke-width:3;marker-end:url(#a)}</style>
+<defs><marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#34735e" stroke-width="1.5"/></marker></defs>
+<text x="48" y="60" class="title">SAT Reading &amp; Writing Lab</text>
+<text x="48" y="92" class="note">Source-derived architecture · explanatory diagram · runtime cloud sync unverified</text>
+<rect x="48" y="135" width="295" height="135" rx="14" class="box"/>
+<text x="70" y="172" class="h">Bundled question content</text><text x="70" y="206" class="p">questions.json</text><text x="70" y="236" class="p">Optional formatted images</text>
+<rect x="48" y="325" width="295" height="150" rx="14" class="box"/>
+<text x="70" y="363" class="h">Browser practice UI</text><text x="70" y="397" class="p">Filter → answer → explanation</text><text x="70" y="428" class="p">Timing, review, analytics</text>
+<path d="M195 270V323" class="arrow"/>
+<rect x="410" y="325" width="280" height="150" rx="14" class="box"/>
+<text x="432" y="363" class="h">Progress API</text><text x="432" y="397" class="p">GET / PUT /api/progress</text><text x="432" y="428" class="p">Validate and load / upsert</text>
+<path d="M343 398H406" class="arrow"/>
+<rect x="410" y="135" width="280" height="135" rx="14" class="box"/>
+<text x="432" y="172" class="h">ChatGPT identity</text><text x="432" y="206" class="p">Authenticated user ID</text><text x="432" y="236" class="p">required by progress handlers</text>
+<path d="M550 270V322" class="arrow"/>
+<rect x="765" y="325" width="307" height="150" rx="14" class="box"/>
+<text x="787" y="363" class="h">Cloudflare D1</text><text x="787" y="397" class="p">user_progress table</text><text x="787" y="428" class="p">One JSON record per user</text>
+<path d="M690 398H761" class="arrow"/>
+<rect x="48" y="530" width="642" height="76" rx="14" class="box"/>
+<text x="70" y="561" class="h">Browser backup: localStorage</text><text x="70" y="588" class="note">Local-first saves; fallback when remote progress is unavailable</text>
+<path d="M195 475V527" class="arrow"/>
+<text x="765" y="552" class="note">Hosting: Sites / Cloudflare Workers</text><text x="765" y="579" class="note">Not a full offline caching system</text>
+</svg>

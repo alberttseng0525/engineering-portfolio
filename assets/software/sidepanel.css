@@ -1,0 +1,227 @@
+:root {
+  --bg-color: #202124;
+  --header-bg: #202124;
+  --text-color: #e8eaed;
+  --text-muted: #9aa0a6;
+  --border-color: #3c4043;
+  --hover-bg: #303134;
+  --focus-outline: #8ab4f8;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.header {
+  background-color: var(--header-bg);
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  color: var(--text-color);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: var(--hover-bg);
+}
+
+button:focus {
+  outline: 2px solid var(--focus-outline);
+}
+
+.file-selector-container {
+  width: 100%;
+}
+
+select {
+  width: 100%;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  appearance: none; /* Remove default arrow */
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%239aa0a6%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 10px auto;
+}
+
+select:focus {
+  border-color: var(--focus-outline);
+}
+
+.editor-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--header-bg);
+}
+
+.format-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  color: var(--text-color);
+  padding: 0;
+}
+
+.format-btn b, .format-btn i, .format-btn u {
+  font-size: 16px;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.divider {
+  width: 1px;
+  height: 16px;
+  background-color: var(--border-color);
+  margin: 0 4px;
+}
+
+.color-picker-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+#color-picker {
+  border: none;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+#color-picker::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+#color-picker::-webkit-color-swatch {
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+#note-editor {
+  flex-grow: 1;
+  background-color: transparent;
+  color: var(--text-color);
+  border: none;
+  outline: none;
+  font-family: var(--font-family);
+  font-size: 15px;
+  line-height: 1.5;
+  padding: 16px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+#note-editor:empty:before {
+  content: attr(placeholder);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+#note-editor ul, #note-editor ol {
+  padding-left: 24px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+#note-editor::-webkit-scrollbar {
+  width: 8px;
+}
+
+#note-editor::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#note-editor::-webkit-scrollbar-thumb {
+  background: #5f6368;
+  border-radius: 4px;
+}
+
+#note-editor::-webkit-scrollbar-thumb:hover {
+  background: #80868b;
+}
+
+.footer {
+  padding: 8px 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: right;
+  border-top: 1px solid var(--border-color);
+}

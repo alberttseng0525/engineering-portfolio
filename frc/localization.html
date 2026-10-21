@@ -47,10 +47,10 @@
     @media(max-width:900px){.localization-video-grid{grid-template-columns:1fr 1fr}}
     @media(max-width:760px){.localization-grid,.localization-media-grid,.localization-coverage,.localization-setup-layout,.localization-video-grid{grid-template-columns:1fr}.localization-diagram{padding:10px;margin-inline:-8px;overflow-x:auto}.localization-diagram svg{min-width:760px}.localization-diagram figcaption{padding:0 8px}}
   </style>
-</head>
-<body>
-  <header><a href="../index.html?v=3"><b>Po Chun Tseng / Engineering</b></a><nav class="topnav" aria-label="Portfolio navigation"><a href="../index.html?v=3">Timeline</a><a href="index.html?v=3">FRC</a><a href="../projects/drone.html?v=3">Drone</a><a href="../projects/lidar.html?v=3">LiDAR Robot</a><a href="../projects/monitor.html?v=3">Hardware</a><a href="../projects/software.html?v=3">Software</a><a href="../projects/research.html?v=3">Research</a><a href="../projects/trading.html?v=3">Trading Bot</a></nav></header>
-  <main class="page localization-page">
+<link rel="stylesheet" href="../subpages.css?v=4"></head>
+<body class="case-study">
+  <a class="skip" href="#main">Skip to content</a><header class="portfolio-header"><a class="portfolio-mark" href="../index.html" aria-label="Po Chun Tseng home">PC<span>.</span></a><span class="portfolio-name">Po Chun Tseng <span>/ Engineering</span></span><nav aria-label="Portfolio navigation"><a href="../index.html#work">Selected work</a><a href="../index.html#journey">Journey</a><a href="../index.html#about">About</a></nav></header><nav class="project-navigation" aria-label="FRC projects"><a href="index.html">FRC overview</a><a href="object-detection.html">Object detection</a><a href="java-migration.html">Java migration</a><a href="localization.html" aria-current="page">Localization</a><a href="aiming.html">Aiming</a></nav>
+  <main id="main" class="page localization-page">
     <a class="more" href="index.html?v=3">← FRC overview</a>
     <div class="kicker">Oct 2025–Mar 2026 · FRC Team 8020</div>
     <h1>Multi-Camera Robot Localization</h1>
@@ -116,7 +116,7 @@
       <div class="kicker">INITIAL TEST SETUP</div>
       <h2>Early hardware testing</h2>
       <p>The first setup was still being wired, so callouts identify the components that are visible in the photo.</p>
-      <figure class="localization-figure localization-sync-primary" style="max-width:760px;margin:22px auto 0">
+      <figure class="localization-figure localization-sync-primary" style="max-width:300px;margin:22px auto 0">
         <div class="setup-photo">
           <img src="../assets/localization-initial-setup.jpg" alt="Early robot test setup annotated to identify the 12 volt battery, USB camera, main computer, radio, power distributor, and Orange Pi" loading="lazy">
           <svg viewBox="0 0 960 1706" role="img" aria-labelledby="setup-title setup-desc" xmlns="http://www.w3.org/2000/svg">
@@ -162,12 +162,7 @@
       </div>
     </section>
 
-    <section class="localization-section">
-      <div class="kicker">FUSION APPROACH</div>
-      <h2>Kalman filter: fuse camera estimates with odometry</h2>
-      <p>The buffered vision estimates provide field-based position measurements, while robot odometry tracks motion between camera updates. The Kalman filter combines those inputs into one robot pose estimate, balancing the camera measurements with the motion prediction over time.</p>
-      <figure class="localization-figure localization-filter-figure" role="img" aria-label="Kalman filter fuses buffered camera pose estimates with robot odometry to produce the robot pose estimate"><svg viewBox="0 0 1120 330" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><marker id="filter-arrow" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto"><path d="M1 1L10 6 1 11" fill="none" stroke="#78e2dc" stroke-width="2"/></marker></defs><g font-family="system-ui,sans-serif" text-anchor="middle"><rect x="40" y="48" width="290" height="86" rx="18" fill="#203940" stroke="#78e2dc" stroke-width="3"/><text x="185" y="84" fill="#78e2dc" font-size="18" font-weight="700">VISION INPUT</text><text x="185" y="112" fill="#fff" font-size="20" font-weight="700">Buffered camera poses</text><rect x="40" y="196" width="290" height="86" rx="18" fill="#203940" stroke="#78e2dc" stroke-width="3"/><text x="185" y="232" fill="#78e2dc" font-size="18" font-weight="700">MOTION INPUT</text><text x="185" y="260" fill="#fff" font-size="20" font-weight="700">Robot odometry</text><rect x="440" y="108" width="280" height="112" rx="20" fill="#21453f" stroke="#8ccbb4" stroke-width="3"/><text x="580" y="151" fill="#8ccbb4" font-size="18" font-weight="700">FUSION</text><text x="580" y="185" fill="#fff" font-size="25" font-weight="800">Kalman filter</text><rect x="830" y="108" width="250" height="112" rx="20" fill="#21453f" stroke="#8ccbb4" stroke-width="3"/><text x="955" y="151" fill="#8ccbb4" font-size="18" font-weight="700">OUTPUT</text><text x="955" y="185" fill="#fff" font-size="23" font-weight="800">Robot pose</text><path d="M330 90C380 90 380 145 440 145M330 240C380 240 380 185 440 185M720 164H830" fill="none" stroke="#78e2dc" stroke-width="5" marker-end="url(#filter-arrow)"/></g></svg><figcaption>Pose estimation · Buffered camera measurements correct the odometry-based motion estimate.</figcaption></figure>      <div class="localization-note" style="margin-top:22px"><strong>Current scope:</strong> the page documents the reported architecture and the supplied test views. No specific accuracy, update rate, or competition result is claimed.</div>
-    </section>
+
   </main>
   <footer><strong>FRC Team 8020 · 2025–2026</strong><p>Multi-camera AprilTag observations and robot pose estimation.</p></footer>
 </body>
