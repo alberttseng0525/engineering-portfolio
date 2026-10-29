@@ -9,7 +9,7 @@
     if (overview) {
       const link = document.createElement('a');
       link.href = overview.getAttribute('href');
-      link.textContent = index === 0 ? 'FRC overview ↗' : 'Software overview ↗';
+      link.textContent = ({frc: 'FRC overview ↗', software: 'Software overview ↗', research: 'Research overview ↗'})[section.id] || 'Overview ↗';
       link.className = 'rail-overview';
       panel.append(link);
     }
